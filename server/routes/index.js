@@ -1,22 +1,29 @@
 var express = require('express');
 var router = express.Router();
 var auth = require('../auth');
-var db = require('../db/index');
+
 /* GET home page. */
 
-router.get('/',
-function(req, res, next) {
-  res.render('index', { title: 'Express' });
+// function ensureAuthenticated(req, res, next) {
+//   if (req.isAuthenticated()) { return next(); }
+//   else { res.send('Not Authenticated!'); }
+// }
+
+router.get('/', (req, res) =>{
+  res.render('index', { title: 'Express'});
+  // console.log(req.user);
 })
 
 router.get('/auth/dailymotion',
-auth.passport.authenticate('dailymotion', {scope:'manage_videos', session:false}));
+auth.passport.authenticate('dailymotion', {scope: 'userinfo', session:false}));
 
 router.get('/auth/dailymotion/callback',
 auth.passport.authenticate('dailymotion', { failureRedirect: '/login'}),
-function(req, res) {
+function(req, res, user) {
   // Successful authentication, redirect home.
-  res.redirect('http://localhost:3100');
+    return res.redirect('http://localhost:3000');
 });
+
+
 
 module.exports = router;

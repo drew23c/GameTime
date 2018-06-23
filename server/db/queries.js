@@ -1,4 +1,5 @@
 var db = require('./index');
+var axios = require('axios');
 
 getUsers = (req, res, next) =>{
     db.any('SELECT * FROM users').then(data =>{
@@ -18,7 +19,7 @@ getUsers = (req, res, next) =>{
 
 getOneUser = (req, res, next) =>{
     let id = req.params.id;
-    db.any('SELECT name FROM users WHERE id = ${id}', {id: id}).then(data =>{
+    db.any('SELECT name FROM users WHERE id = $1', [id]).then(data =>{
         res.status(200).json({
             status:'success',
             data:data,
@@ -34,7 +35,6 @@ getOneUser = (req, res, next) =>{
 }
 
 getVideos = (req, res, next) =>{
-    console.log('hi')
     db.any('SELECT * FROM videos').then(data =>{
         res.status(200).json({
             status:'success',
@@ -52,7 +52,7 @@ getVideos = (req, res, next) =>{
 
 getUserVideos = (req, res, next) =>{
     let userId = req.params.userId;
-    db.any('SELECT * FROM videos WHERE userId = ${userId}', {userId: userId}).then(data =>{
+    db.any('SELECT * FROM videos WHERE userId = $1', [userId]).then(data =>{
         res.status(200).json({
             status:'success',
             data:data,
@@ -69,7 +69,7 @@ getUserVideos = (req, res, next) =>{
 
 getUserLikes = (req, res, next) =>{
     let userId = req.params.userId;
-    db.any('SELECT * FROM likes WHERE userId = ${userId}', {userId: userId}).then(data =>{
+    db.any('SELECT * FROM likes WHERE userId = $1', [userId]).then(data =>{
         res.status(200).json({
             status:'success',
             data:data,
@@ -86,7 +86,7 @@ getUserLikes = (req, res, next) =>{
 
 getUserWatch = (req, res, next) =>{
     let userId = req.params.userId;
-    db.any('SELECT * FROM watchlater WHERE userId = ${userId}', {userId: userId}).then(data =>{
+    db.any('SELECT * FROM watchlater WHERE userId = $1', [userId]).then(data =>{
         res.status(200).json({
             status:'success',
             data:data,
@@ -106,8 +106,9 @@ postVideo = (req, res, next) =>{
     let title = req.body.title;
     let description = req.body.description;
     let selectedFile = req.body.selectedFile;
+
     db.any('INSERT INTO videos (userId, title, description, selectedFile) VALUES (${userId}, ${title}, ${description}, ${selectedFile})', {userId: userId, title: title, description: description, selectedFile: selectedFile})
-    .then(data =>{
+    .then(() =>{
         res.status(200).json({
             status:'success',
             message:'video uploaded'
@@ -121,6 +122,36 @@ postVideo = (req, res, next) =>{
     })
 }
 
+// postUserVid = (req, res, next) =>{
+//     let userId = req.body.userId;
+//     let title = req.body.title;
+//     let description = req.body.description;
+//     let selectedFile = req.body.selectedFile;
+//     let id = req.body.id;
+
+//     db.any('SELECT upload_url FROM users WHERE id = ${id}', {id: id})
+//     .then(data =>{
+//         axios.get(data + '?url=' + selectedFile)
+//         console.log(data)
+//         .then(url =>{
+//           res.status(200).json({
+//               status: 'success',
+//               data: url,
+//               message: 'user\'s video added'
+//           })  
+//         })
+//         .catch(err =>{
+//             res.status(500).json({
+//                 status: 'failed',
+//                 message:err
+//             })
+//         })
+//     })
+//     .catch(err =>{
+//         console.log(err)
+//     })
+// }
+
 module.exports = {
     getUsers, 
     getOneUser,
@@ -128,5 +159,6 @@ module.exports = {
     getUserVideos,
     getUserLikes,
     getUserWatch,
-    postVideo
+    postVideo,
+    // postUserVid
 }

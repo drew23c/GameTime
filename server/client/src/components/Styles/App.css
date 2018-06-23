@@ -1,0 +1,46 @@
+.App {
+  text-align: center;
+  background-color:black;
+  background-image: url('../Images/SportsEquipment.jpg');
+  background-size: cover;
+  height: 100vh;
+  color:yellow;
+  flex-grow: 2;
+}
+.App a{
+  font-size: 150%;
+  text-decoration: none;
+  margin: 0 3% 0 3%;
+}
+.App a:hover{
+  text-decoration: none;
+}
+
+.App a:visited{
+  color:green;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: medium;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
