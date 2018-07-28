@@ -102,12 +102,24 @@ getUserWatch = (req, res, next) =>{
 }
 
 postVideo = (req, res, next) =>{ 
-    let userId = req.body.userId;
-    let title = req.body.title;
-    let description = req.body.description;
-    let selectedFile = req.body.selectedFile;
+    // let title = req.body.title;
+    // let description = req.body.description;
+    // let selectedFile = req.body.selectedFile;
 
-    db.any('INSERT INTO videos (userId, title, description, selectedFile) VALUES (${userId}, ${title}, ${description}, ${selectedFile})', {userId: userId, title: title, description: description, selectedFile: selectedFile})
+    class FormData{
+        constructor(title,description, selectedFile){
+            this.title = title,
+            this.description = description,
+            this.selectedFile = selectedFile
+        }
+    }
+    const data = new FormData();
+    data.append('title', title);
+    data.append('description', description);
+    data.append('video', selectedFile);
+
+
+    db.any('INSERT INTO videos (title, description, selectedFile) VALUES (${title}, ${description}, ${selectedFile})', {title: data.title, description: data.description, selectedFile: data.selectedFile})
     .then(() =>{
         res.status(200).json({
             status:'success',
