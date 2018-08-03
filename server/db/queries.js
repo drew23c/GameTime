@@ -1,5 +1,6 @@
 var db = require('./index');
-var axios = require('axios');
+var multer = require('multer');
+var upload = multer({ dest: 'uploads/' })
 
 getUsers = (req, res, next) =>{
     db.any('SELECT * FROM users').then(data =>{
@@ -102,24 +103,11 @@ getUserWatch = (req, res, next) =>{
 }
 
 postVideo = (req, res, next) =>{ 
-    // let title = req.body.title;
-    // let description = req.body.description;
-    // let selectedFile = req.body.selectedFile;
+    let title = req.body.title;
+    let description = req.body.description;
+    let selectedFile = upload.single('selectedFile');
 
-    class FormData{
-        constructor(title,description, selectedFile){
-            this.title = title,
-            this.description = description,
-            this.selectedFile = selectedFile
-        }
-    }
-    const data = new FormData();
-    data.append('title', title);
-    data.append('description', description);
-    data.append('video', selectedFile);
-
-
-    db.any('INSERT INTO videos (title, description, selectedFile) VALUES (${title}, ${description}, ${selectedFile})', {title: data.title, description: data.description, selectedFile: data.selectedFile})
+    db.any('INSERT INTO videos (title, description, selectedFile) VALUES (${title}, ${description}, ${selectedFile})', {title: title, description: description, selectedFile: selectedFile})
     .then(() =>{
         res.status(200).json({
             status:'success',

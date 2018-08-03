@@ -23,9 +23,9 @@ passport.deserializeUser((id, done)=>{
 })
 
 passport.use(new DailymotionStrategy({
-    clientID: DM.keys.DM_API,
-    clientSecret: DM.keys.DM_SECRET,
-    callbackURL: DM.keys.DM_CALLBACK
+    clientID: DM.DM_API,
+    clientSecret: DM.DM_SECRET,
+    callbackURL: DM.DM_CALLBACK
   },
   function(accessToken, refreshToken, profile, done) {
       // Query the database to find user record associated with this
